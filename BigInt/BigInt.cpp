@@ -176,11 +176,18 @@ BigInt BigInt::operator++() {
 	if (value.back() != '9')
 		temp.value.back() += 1;
 	else {
-		temp.value.pop_back();
-		temp.value.back() += 1;
-		temp.value.push_back('0');
+		//int count;
+		//while (value.back() == '9') {
+			temp.value.pop_back();
+			temp.value.back() += 1;
+			//++count;
+		//}
+		//for (; count > 0; --count) {
+			temp.value.push_back('0');
+		//}
 	}
-	/*^^^ Will not work on numbers that end in successive 9s ^^^*/
+	/*^^^ Will not work on numbers that end in successive 9s, and negatuve numbers ^^^*/
+	/*^^^ Probably implement addition operation and use that for this function ^^^*/
 	return temp;
 }
 
