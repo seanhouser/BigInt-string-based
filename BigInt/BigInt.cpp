@@ -33,16 +33,28 @@ int _tmain(int argc, _TCHAR* argv[])
 	*/
 	
 	//atithmetic test  - INCOMPLETE
-	BigInt add_test1 = 22;
-	BigInt add_test2 = 11;
+	BigInt add_test1 = -1;
+	BigInt add_test2 = -9;
 	BigInt add_result = add_test1 + add_test2;
+	std::cout << add_test1 << " + " << add_test2 << " = " << add_result << '\n';
+	add_test1 = -1;
+	add_test2 = -99;
+	add_result = add_test1 + add_test2;
+	std::cout << add_test1 << " + " << add_test2 << " = " << add_result << '\n';
+	add_test1 = -1;
+	add_test2 = -9999;
+	add_result = add_test1 + add_test2;
+	std::cout << add_test1 << " + " << add_test2 << " = " << add_result << '\n';
+	add_test1 = -100;
+	add_test2 = -100900;
+	add_result = add_test1 + add_test2;
+	std::cout << add_test1 << " + " << add_test2 << " = " << add_result << '\n';
+	add_test1 = -100;
+	add_test2 = -100500;
+	add_result = add_test1 + add_test2;
+	std::cout << add_test1 << " + " << add_test2 << " = " << add_result << '\n';
+	
 
-	std::string s = "101";
-	if (is_valid_number(s)) {
-		std::cout << "Your number is: " << add_result << '\n';
-	}
-	else
-		notify_invalid_input(s);
 	return 0;
 }
 
@@ -209,9 +221,10 @@ BigInt BigInt::operator++() {
 */
 
 BigInt BigInt::operator+(const BigInt& rhs) {
-	BigInt result = *this;
+	BigInt result;
 	std::string lhs_string;
 	std::string rhs_string;
+	bool carry = false;
 
 	if (value.size() >= rhs.value.size()) {		// assign largest int to lhs and smallest to rhs
 		lhs_string = value;
@@ -221,11 +234,13 @@ BigInt BigInt::operator+(const BigInt& rhs) {
 		lhs_string = rhs.value;
 		rhs_string = value;
 	}
+	result.value = lhs_string;	//preload result with largest integer
 	
-	bool carry = false;
-	if (sign == '+' && rhs.sign == '+') {	// both integers are positive
-		int offset = result.value.size()-1;	// used to find location of digit to replace
-		while (!lhs_string.empty() && !rhs_string.empty()) {
+
+	if (sign == rhs.sign) {	// both integers are positive or both integers are negative
+		result.sign = sign;	
+		int offset = result.value.size()-1;;	// used to find location of digit to replace
+		while (!lhs_string.empty() && !rhs_string.empty()) {	// process addition operation until all digits of smallest integer have been processed
 			char added_char = (lhs_string.back() + rhs_string.back()) - 48;
 			
 			if (carry == 1) {
@@ -242,7 +257,27 @@ BigInt BigInt::operator+(const BigInt& rhs) {
 			rhs_string.pop_back();
 		}
 
+
+		while (carry) {		// if there is a carry, continue processing addition until all digits of the largest int are completely processed
+			if (lhs_string.empty()) {
+				result.value.insert(0, "1");
+				carry = false;
+			}
+			else {
+				if (lhs_string.back() == '9') {		// check for additional carrying
+					result.value[lhs_string.size()-1] = '0';
+					//carry = true;
+					lhs_string.pop_back();
+				}
+				else {								// add carried 1 if no additional carrying
+					++result.value[lhs_string.size()-1];
+					carry = false;
+					lhs_string.pop_back();
+				}
+			}
+		}
 	}
+	//else { perform subtraction operation }
 
 	return result;
 }
