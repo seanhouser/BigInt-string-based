@@ -11,28 +11,48 @@ void notify_invalid_input(const std::string& input);
 int _tmain(int argc, _TCHAR* argv[])
 {
 	/*
-	//constructor tests - COMPLETE
+	// COMPLETE
+	// constructor tests (incl. utility methods)
 	BigInt large_int(s);
 	BigInt large_int2(large_int);
 	BigInt int_test(4);
 	BigInt str_test = "789";
 	BigInt int_test2 = -777;
+	std::cout << large_int << ' ' << large_int2 << ' ' << int_test << ' ' << str_test << ' ' << int_test2;
 	*/
 	
 	/*
-	//cin test - COMPLETE
+	// COMPLETE
+	// cin test
 	BigInt cin_test;
 	std::cout << "Please enter number for BigInt cin_test: ";
 	std::cin >> cin_test;
+	std::cout << cin_test;
+	*/
+	
+	/*
+	// COMPLETE
+	// unary negation tests
+	// DON'T FORGET TO TEST ++ ON A NEGATIVE NUMBER ONCE SUBTRACTION IS IMPLEMENTED
+	BigInt unary_test1 = "5";
+	std::cout << "The negation of " << unary_test1 << " is: " << -unary_test1 << '\n';
 	*/
 
 	/*
-	//unary tests (don't forget postfix) - INCOMPLETE
-	BigInt unary_test = "5";
-	unary_test = -unary_test;
-	*/
+	// INCOMPLETE
+	// unary increment tests
+	BigInt unary_test1 = 5;
+	std::cout << "++" << unary_test1 << " is: ";
+	std::cout << ++unary_test1 << '\n';
+	BigInt unary_test2 = 1;
+	std::cout <<  unary_test2 << "++" << " is: ";
+	std::cout << unary_test2++ << " on return from operation, but\n";
+	std::cout << "after return from operation previous BigInt is now: " << unary_test2 << '\n';
+	*/	
 	
-	//atithmetic test  - INCOMPLETE
+	/*
+	// COMPLETE
+	// arithmetic + test (BigInt + BigInt)
 	BigInt add_test1 = -1;
 	BigInt add_test2 = -9;
 	BigInt add_result = add_test1 + add_test2;
@@ -54,9 +74,31 @@ int _tmain(int argc, _TCHAR* argv[])
 	add_result = add_test1 + add_test2;
 	std::cout << add_test1 << " + " << add_test2 << " = " << add_result << '\n';
 	
+	// COMPLETE
+	// arithmetic + test (BigInt + long long)
+	BigInt add_test1 = -1;
+	int add_test2 = -9;
+	BigInt add_result = add_test1 + add_test2;
+	std::cout << add_test1 << " + " << add_test2 << " = " << add_result << '\n';
+	*/
+
+	/*
+	// COMPLETE
+	// arithmetic-assignment += test (BigInt and long long params)
+	BigInt aa_test1 = 7;
+	BigInt aa_test2 = 4;
+	int aa_int_test = 5;
+	std::cout << aa_test1 << " set equal to " << aa_test1 << " + " << aa_test2 << " is: ";
+	aa_test1 += aa_test2;
+	std::cout << aa_test1 << '\n';
+	std::cout << aa_test1 << " set equal to " << aa_test1 << " + " << aa_int_test << " is: ";
+	aa_test1 += aa_int_test;
+	std::cout << aa_test1 << '\n';
+	*/	
 
 	return 0;
 }
+
 
 /*
     Utility functions
@@ -75,6 +117,7 @@ bool is_valid_number(const std::string& num) {
 void notify_invalid_input(const std::string& input) {
     std::cout << "Invalid input! Expected an integer, got \'" << input << "\'.\n";
 }
+
 
 /*
     Constructors
@@ -115,7 +158,6 @@ BigInt::BigInt(const std::string num) {
     }
 }
 
-
 BigInt::BigInt(const long long num) {
     value = std::to_string(num);
     if (num < 0) {
@@ -148,11 +190,11 @@ std::ostream& operator<<(std::ostream& out, const BigInt& num) {
     return out;
 }
 
+
 /*
     Assignment operators
     --------------------
 */
-
 
 void BigInt::operator=(const BigInt& num) {
     value = num.value;
@@ -171,11 +213,11 @@ void BigInt::operator=(const std::string num) {
     sign = temp.sign;
 }
 
+
 /*
 	Unary operators
     ---------------
 */
-
 
 BigInt BigInt::operator-() {
     BigInt temp;
@@ -191,29 +233,16 @@ BigInt BigInt::operator-() {
     return temp;
 }
 
-/* //^^^ Probably implement addition operation and use that for this function ^^^
 BigInt BigInt::operator++() {
-	BigInt temp = *this;
+	return *this += 1;
+}
 
-	if (value.back() != '9')
-		temp.value.back() += 1;
-	else {
-		//int count;
-		//while (value.back() == '9') {
-			temp.value.pop_back();
-			temp.value.back() += 1;
-			//++count;
-		//}
-		//for (; count > 0; --count) {
-			temp.value.push_back('0');
-		//}
-	}
-	//^^^ Will not work on numbers that end in successive 9s, and negatuve numbers ^^^
-	
+BigInt BigInt::operator++( int ) {
+	BigInt temp = *this;
+	++*this;
 	return temp;
 }
-*/
-// TODO
+
 
 /*
 	Arithmetic operators
@@ -282,17 +311,27 @@ BigInt BigInt::operator+(const BigInt& rhs) {
 	return result;
 }
 
-
+BigInt BigInt::operator+(long long num) {
+	BigInt rhs(num);
+	BigInt result = *this + rhs;
+	return result;
+}
 
 
 /*
-//    Arithmetic-assignment operators
+    Arithmetic-assignment operators
     -------------------------------
-
-
-// TODO
-
 */
+
+BigInt BigInt::operator+=(const BigInt& rhs) {
+	*this = *this + rhs;
+	return *this;
+}
+
+BigInt BigInt::operator+=(long long num) {
+	*this = *this + num;
+	return *this;
+}
 
 /*
 //    Relational operators
