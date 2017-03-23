@@ -10,27 +10,36 @@ void notify_invalid_input(const std::string& input);
 
 int _tmain(int argc, _TCHAR* argv[])
 {
-	//constructor tests
-	std::string s = "10";
+	/*
+	//constructor tests - COMPLETE
 	BigInt large_int(s);
 	BigInt large_int2(large_int);
-	BigInt int_test(1000000);
+	BigInt int_test(4);
 	BigInt str_test = "789";
 	BigInt int_test2 = -777;
+	*/
 	
 	/*
-	//cin test 
+	//cin test - COMPLETE
 	BigInt cin_test;
 	std::cout << "Please enter number for BigInt cin_test: ";
 	std::cin >> cin_test;
 	*/
 
-	//unary tests (don't forget postfix)
-	str_test = -str_test;
-	str_test = ++str_test;
+	/*
+	//unary tests (don't forget postfix) - INCOMPLETE
+	BigInt unary_test = "5";
+	unary_test = -unary_test;
+	*/
+	
+	//atithmetic test  - INCOMPLETE
+	BigInt add_test1 = 22;
+	BigInt add_test2 = 11;
+	BigInt add_result = add_test1 + add_test2;
 
+	std::string s = "101";
 	if (is_valid_number(s)) {
-		std::cout << "Your number is: " << str_test << '\n';
+		std::cout << "Your number is: " << add_result << '\n';
 	}
 	else
 		notify_invalid_input(s);
@@ -170,6 +179,7 @@ BigInt BigInt::operator-() {
     return temp;
 }
 
+/* //^^^ Probably implement addition operation and use that for this function ^^^
 BigInt BigInt::operator++() {
 	BigInt temp = *this;
 
@@ -186,23 +196,61 @@ BigInt BigInt::operator++() {
 			temp.value.push_back('0');
 		//}
 	}
-	/*^^^ Will not work on numbers that end in successive 9s, and negatuve numbers ^^^*/
-	/*^^^ Probably implement addition operation and use that for this function ^^^*/
+	//^^^ Will not work on numbers that end in successive 9s, and negatuve numbers ^^^
+	
 	return temp;
 }
-
+*/
 // TODO
 
 /*
+	Arithmetic operators
+    ---------------
+*/
 
-//    Arithmetic operators
-    --------------------
+BigInt BigInt::operator+(const BigInt& rhs) {
+	BigInt result = *this;
+	std::string lhs_string;
+	std::string rhs_string;
+
+	if (value.size() >= rhs.value.size()) {		// assign largest int to lhs and smallest to rhs
+		lhs_string = value;
+		rhs_string = rhs.value;
+	}
+	else {
+		lhs_string = rhs.value;
+		rhs_string = value;
+	}
+	
+	bool carry = false;
+	if (sign == '+' && rhs.sign == '+') {	// both integers are positive
+		int offset = result.value.size()-1;	// used to find location of digit to replace
+		while (!lhs_string.empty() && !rhs_string.empty()) {
+			char added_char = (lhs_string.back() + rhs_string.back()) - 48;
+			
+			if (carry == 1) {
+				added_char += 1; 
+				carry = false;
+			}
+			if (added_char > 57) {
+				added_char -= 10;
+				carry = true;
+			}
+			result.value[offset] = added_char;
+			--offset;
+			lhs_string.pop_back();
+			rhs_string.pop_back();
+		}
+
+	}
+
+	return result;
+}
 
 
-// TODO
 
 
-
+/*
 //    Arithmetic-assignment operators
     -------------------------------
 
