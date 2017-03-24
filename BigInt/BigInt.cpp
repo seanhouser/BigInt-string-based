@@ -82,6 +82,13 @@ int _tmain(int argc, _TCHAR* argv[])
 	std::cout << add_test1 << " + " << add_test2 << " = " << add_result << '\n';
 	*/
 
+	// INCOMPLETE
+	// aritmetic * test (BigInt * BigInt)
+	BigInt mul_test1 = 10;
+	BigInt mul_test2 = 10;
+	BigInt result = mul_test1 * mul_test2;
+	std::cout << mul_test1 << " * " << mul_test2 << " is: " << result << '\n';
+
 	/*
 	// COMPLETE
 	// arithmetic-assignment += test (BigInt and long long params)
@@ -314,6 +321,31 @@ BigInt BigInt::operator+(const BigInt& rhs) {
 BigInt BigInt::operator+(long long num) {
 	BigInt rhs(num);
 	BigInt result = *this + rhs;
+	return result;
+}
+
+
+// COULD FORCE SMALLER NUMBER TO BE ITERATIONS FOR PERFORMACE IMPROVEMENT
+BigInt BigInt::operator*(const BigInt& rhs) {
+	BigInt result = *this;
+	std::string multiplier = rhs.value;
+	std::string initial_value = value;
+	int magnitude = 1;
+
+	if (value == "0" || rhs.value == "0")	// zero case
+		result = 0;
+	// DO I NEED PROPERTIES OF ONE CASED HERE? (x*1, x*-1, etc)
+	// DOESN'T WORK FOR NEGATIVES
+	else {
+		while (!multiplier.empty()) {
+			for (int i = (multiplier.back() - 48)*magnitude; i > 1; --i) {
+				result += initial_value;
+			}
+			multiplier.pop_back();
+			magnitude *= 10;
+		}
+	}
+
 	return result;
 }
 
