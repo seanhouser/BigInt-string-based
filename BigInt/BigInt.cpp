@@ -104,12 +104,12 @@ int _tmain(int argc, _TCHAR* argv[])
 	// INCOMPLETE
 	// arithmetic - test (BigInt - BigInt)
 	BigInt subtest1 = 10;
-	BigInt subtest2 = -3;
+	BigInt subtest2 = -30;
 	BigInt subresult;
 	subresult = subtest1 - subtest2;
 	std::cout << subtest1 << " - " << subtest2 << " = " << subresult << '\n';
 	subtest1 = -3;
-	subtest2 = 3;
+	subtest2 = 17;
 	subresult = subtest1 - subtest2;
 	std::cout << subtest1 << " - " << subtest2 << " = " << subresult << '\n';
 
@@ -411,16 +411,10 @@ BigInt BigInt::operator-(const BigInt& rhs) {
 	std::string rhs_string = rhs.value;
 	BigInt result;
 
-	if (rhs.sign == '-') {		// x - (-y)   ==   x + y
-		/*^^^^ NOT WORKING FOR (NEG - NEG) UNTIL ADDITION CAN HANDLE CASE ^^^^*/
+	if (sign == '+' && rhs.sign == '-' || sign == '-' && rhs.sign == '+') {		// x - (-y)  ==  x + y   // -x - y  ==  -(x + y)
 		BigInt rhs_temp = rhs;
-		rhs_temp.sign = '+';
+		rhs_temp.sign = sign;
 		result = *this + rhs_temp;
-	}
-	else if (sign == '-' && rhs.sign == '+') {		// -x - y   ==   -x + -y
-		BigInt rhs_temp = rhs;	// repeat of above loop
-		rhs_temp.sign = '-';
-		result = *this + rhs_temp;	//repeat of above loop
 	}
 
 	return result;
