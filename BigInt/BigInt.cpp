@@ -51,7 +51,7 @@ int _tmain(int argc, _TCHAR* argv[])
 	*/	
 	
 	/*
-	// COMPLETE
+	// INCOMPLETE (missing pos + neg && neg + pos)
 	// arithmetic + test (BigInt + BigInt)
 	BigInt add_test1 = -1;
 	BigInt add_test2 = -9;
@@ -74,7 +74,7 @@ int _tmain(int argc, _TCHAR* argv[])
 	add_result = add_test1 + add_test2;
 	std::cout << add_test1 << " + " << add_test2 << " = " << add_result << '\n';
 	
-	// COMPLETE
+	// INCOMPLETE (missing pos + neg && neg + pos)
 	// arithmetic + test (BigInt + long long)
 	BigInt add_test1 = -1;
 	int add_test2 = -9;
@@ -82,7 +82,7 @@ int _tmain(int argc, _TCHAR* argv[])
 	std::cout << add_test1 << " + " << add_test2 << " = " << add_result << '\n';
 	*/
 
-	
+	/*
 	// COMPLETE
 	// aritmetic * test (BigInt * BigInt and long long params)
 	BigInt mul_test1 = 10;
@@ -99,7 +99,19 @@ int _tmain(int argc, _TCHAR* argv[])
 	std::cout << mul_test1 << " * " << mul_test2 << " is: " << result << '\n';
 	std::cout << mul_test1 << " * 10 is: " << mul_test1 * 10 << '\n';
 	std::cout << mul_test1 << " * 9999 is: " << mul_test1 * 9999 << '\n';
-	
+	*/
+
+	// INCOMPLETE
+	// arithmetic - test (BigInt - BigInt)
+	BigInt subtest1 = 10;
+	BigInt subtest2 = -3;
+	BigInt subresult;
+	subresult = subtest1 - subtest2;
+	std::cout << subtest1 << " - " << subtest2 << " = " << subresult << '\n';
+	subtest1 = -3;
+	subtest2 = 3;
+	subresult = subtest1 - subtest2;
+	std::cout << subtest1 << " - " << subtest2 << " = " << subresult << '\n';
 
 
 	/*
@@ -391,6 +403,26 @@ BigInt BigInt::operator*(const BigInt& rhs) {
 BigInt BigInt::operator*(long long num) {
 	BigInt rhs(num);
 	BigInt result = *this * rhs;
+	return result;
+}
+
+BigInt BigInt::operator-(const BigInt& rhs) {
+	std::string lhs_string = value;
+	std::string rhs_string = rhs.value;
+	BigInt result;
+
+	if (rhs.sign == '-') {		// x - (-y)   ==   x + y
+		/*^^^^ NOT WORKING FOR (NEG - NEG) UNTIL ADDITION CAN HANDLE CASE ^^^^*/
+		BigInt rhs_temp = rhs;
+		rhs_temp.sign = '+';
+		result = *this + rhs_temp;
+	}
+	else if (sign == '-' && rhs.sign == '+') {		// -x - y   ==   -x + -y
+		BigInt rhs_temp = rhs;	// repeat of above loop
+		rhs_temp.sign = '-';
+		result = *this + rhs_temp;	//repeat of above loop
+	}
+
 	return result;
 }
 
