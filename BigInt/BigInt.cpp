@@ -112,6 +112,10 @@ int _tmain(int argc, _TCHAR* argv[])
 	subtest2 = 17;
 	subresult = subtest1 - subtest2;
 	std::cout << subtest1 << " - " << subtest2 << " = " << subresult << '\n';
+	subtest1 = 100;
+	subtest2 = 10;
+	subresult = subtest1 - subtest2;
+	std::cout << subtest1 << " - " << subtest2 << " = " << subresult << '\n';
 
 
 	/*
@@ -411,10 +415,34 @@ BigInt BigInt::operator-(const BigInt& rhs) {
 	std::string rhs_string = rhs.value;
 	BigInt result;
 
-	if (sign == '+' && rhs.sign == '-' || sign == '-' && rhs.sign == '+') {		// x - (-y)  ==  x + y   // -x - y  ==  -(x + y)
+	if (lhs_string == rhs_string)
+			result = 0;
+	else if (sign == '+' && rhs.sign == '-' || sign == '-' && rhs.sign == '+') {		// x - (-y)  ==  x + y   // -x - y  ==  -(x + y)
 		BigInt rhs_temp = rhs;
 		rhs_temp.sign = sign;
 		result = *this + rhs_temp;
+	}
+	else {
+		result = *this;
+		int offset = result.value.size()-1;
+		char subtracted_char;
+		bool borrow = false;
+		while (!lhs_string.empty() && !rhs_string.empty()) {
+			if (borrow) {
+				--lhs_string.back();
+				borrow = false;
+			}
+			if (lhs_string.back() >= rhs_string.back())
+				result.value[offset] = (lhs_string.back() - rhs_string.back()) + 48;
+			else {
+				lhs_string.back() += 10;
+				result.value[offset] = (lhs_string.back() - rhs_string.back()) + 48;
+				borrow = true;
+			}
+			lhs_string.pop_back();
+			rhs_string.pop_back();
+			--offset;
+		}
 	}
 
 	return result;
