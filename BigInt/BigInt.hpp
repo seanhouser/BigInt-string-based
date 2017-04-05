@@ -51,18 +51,18 @@ public:
     BigInt operator--();    // TODO
 
     // Relational operators:
-    bool operator>(const BigInt&);	// TODO
-    bool operator>(long long);		// TODO
-    bool operator>=(const BigInt&); // TODO
-    bool operator>=(long long);		// TODO
-    bool operator<(const BigInt&);	// TODO
-    bool operator<(long long);		// TODO
-    bool operator<=(const BigInt&);	// TODO
-    bool operator<=(long long);		// TODO
+    bool operator>(const BigInt&);	
+    bool operator>(long long);		
+    bool operator>=(const BigInt&); 
+    bool operator>=(long long);		
+    bool operator<(const BigInt&);	
+    bool operator<(long long);		
+    bool operator<=(const BigInt&);	
+    bool operator<=(long long);		
     bool operator==(const BigInt&);	
     bool operator==(long long);		
-    bool operator!=(const BigInt&);	// TODO
-    bool operator!=(long long);		// TODO
+    bool operator!=(const BigInt&);	
+    bool operator!=(long long);		
 
     // I/O stream operators:
     friend std::istream& operator>>(std::istream&, BigInt&);

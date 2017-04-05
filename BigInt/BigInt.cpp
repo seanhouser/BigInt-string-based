@@ -1,5 +1,5 @@
 // BigInt.cpp : Defines the entry point for the console application.
-//
+// 
 
 #include "stdafx.h"
 #include <string>
@@ -101,6 +101,7 @@ int _tmain(int argc, _TCHAR* argv[])
 	std::cout << mul_test1 << " * 9999 is: " << mul_test1 * 9999 << '\n';
 	*/
 
+	
 	// INCOMPLETE
 	// arithmetic - test (BigInt - BigInt)
 	BigInt subtest1 = 10;
@@ -116,19 +117,20 @@ int _tmain(int argc, _TCHAR* argv[])
 	subtest2 = 17;
 	subresult = subtest1 - subtest2;
 	std::cout << subtest1 << " - " << subtest2 << " = " << subresult << '\n';
-	subtest1 = 100;
-	subtest2 = 10;
+	subtest1 = 1000;
+	subtest2 = 990;
 	subresult = subtest1 - subtest2;
 	std::cout << subtest1 << " - " << subtest2 << " = " << subresult << '\n';
 	subtest1 = 1000000;
 	subtest2 = 1;
 	subresult = subtest1 - subtest2;
 	std::cout << subtest1 << " - " << subtest2 << " = " << subresult << '\n';
+	// not functional
 	subtest1 = 1;
 	subtest2 = 2;
 	subresult = subtest1 - subtest2;
 	std::cout << subtest1 << " - " << subtest2 << " = " << subresult << '\n';
-
+	
 
 	/*
 	// COMPLETE
@@ -158,16 +160,55 @@ int _tmain(int argc, _TCHAR* argv[])
 	std::cout << aa_test1 << '\n';
 	*/
 
+	/*
 	// INCOMPLETE
 	// relational operators
 	BigInt compare1 = -2;
 	BigInt compare2 = -2;
 	bool result = compare1 == compare2;
 	std::cout << "Is " << compare1 << " equal to " << compare2 << "?: " << result << '\n';
-	compare1 = -100;
-	int one_hundred = -100;
-	result = compare1 == one_hundred;
-	std::cout << "Is " << compare1 << " equal to " << one_hundred << "?: " << result << '\n';
+	compare1 = 1000;
+	int test_int = 100;
+	result = compare1 == test_int;
+	std::cout << "Is " << compare1 << " equal to " << test_int << "?: " << result << '\n';
+	compare1 = -101;
+	compare2 = -100;
+	result = compare1 > compare2;
+	std::cout << "Is " << compare1 << " greater than " << compare2 << "?: " << result << '\n';
+	compare1 = -100001;
+	test_int = -100000;
+	result = compare1 > test_int;
+	std::cout << "Is " << compare1 << " greater than " << test_int << "?: " << result << '\n';
+	compare1 = 100;
+	compare2 = 100;
+	result = compare1 >= compare2;
+	std::cout << "Is " << compare1 << " greater than or equal to " << compare2 << "?: " << result << '\n';
+	compare1 = 1;
+	compare2 = -2;
+	result = compare1 < compare2;
+	std::cout << "Is " << compare1 << " less than " << compare2 << "?: " << result << '\n';
+	compare1 = -100001;
+	test_int = -100000;
+	result = compare1 < test_int;
+	std::cout << "Is " << compare1 << " less than " << test_int << "?: " << result << '\n';
+	compare1 = -2;
+	compare2 = -2;
+	result = compare1 <= compare2;
+	std::cout << "Is " << compare1 << " less than or equal to " << compare2 << "?: " << result << '\n';
+	compare1 = -100001;
+	test_int = -100001;
+	result = compare1 <= test_int;
+	std::cout << "Is " << compare1 << " less than or equal to " << test_int << "?: " << result << '\n';
+	compare1 = -2;
+	compare2 = 2;
+	result = compare1 != compare2;
+	std::cout << "Is " << compare1 << " NOT equal to " << compare2 << "?: " << result << '\n';
+	compare1 = -100001;
+	test_int = 100001;
+	result = compare1 != test_int;
+	std::cout << "Is " << compare1 << " NOT equal to " << test_int << "?: " << result << '\n';
+	*/
+
 	return 0;
 }
 
@@ -190,12 +231,18 @@ void notify_invalid_input(const std::string& input) {
     std::cout << "Invalid input! Expected an integer, got \'" << input << "\'.\n";
 }
 
+void remove_leading_zeroes(std::string& value) {
+	while (value[0] == '0')
+		value.erase(0, 1);
+}
+
 
 /*
     Constructors
     ------------
 */
 
+// SANITIZE BigIints OF LEADING ZEROES AT CONSTRUCT TIME?
 BigInt::BigInt() {
     value = "0";
     sign = '+';
@@ -475,8 +522,8 @@ BigInt BigInt::operator-(const BigInt& rhs) {
 					result.value[offset] = '9';
 				else
 					result.value[offset] -= 1;
-			if (result.value[offset] == '0' && offset == 0)		// remove leading 0
-				result.value.erase(offset, offset+1);
+			if (result.value[0] == '0')		// remove leading 0
+				remove_leading_zeroes(result.value);
 			--offset;
 			lhs_string.pop_back();
 		}
@@ -519,25 +566,164 @@ BigInt BigInt::operator*=(long long num) {
 */
 
 bool BigInt::operator==(const BigInt& rhs) {
-	bool result = false;
 	if (sign == rhs.sign && value == rhs.value)
-		result = true;
-
-	return result;
+		return true;
+	else
+		return false;
 }
 
 bool BigInt::operator==(long long rhs) {
-	bool result = false;
-	std::string rhs_string = std::to_string(rhs);
+	BigInt rhs_BigInt = rhs;
+	return *this == rhs_BigInt;
+}
 
-	if (sign == '-' && rhs_string[0] == '-')	// account for leading '-' in long long string
-		rhs_string.erase(0,1);
-	if (value == rhs_string) {
-		if (rhs >= 0 && sign == '+' || rhs < 0 && sign == '-')
-			result = true;
+// NOTES FOR REVIEW
+bool BigInt::operator>(const BigInt& rhs) {
+	/* NECESSARY?
+	if LEADING ZEROS then CLEAR LEADING ZEROES
+	*/
+
+	if (sign == '+' && rhs.sign == '-')
+		return true;
+	else if (sign == '-' && rhs.sign == '+')
+		return false;
+
+	if (value.size() > rhs.value.size())
+		return sign == '+';
+	else if (value.size() < rhs.value.size())
+		return sign == '-';
+	else {
+		std::string lhs_string = value;
+		std::string rhs_string = rhs.value;
+		while (!lhs_string.empty()) {
+			if (lhs_string[0] > rhs_string[0])
+				return sign == '+';
+			else if (lhs_string[0] < rhs_string[0])
+				return sign == '-';
+			else {
+				lhs_string.erase(0,1);
+				rhs_string.erase(0,1);
+			}
+		}
+	}
+	// MOVE EQUAL CHECK TO TOP?
+	return false;	// if equal, return false. 
+}
+
+bool BigInt::operator>(long long rhs) {
+	BigInt rhs_BigInt = rhs;
+	return *this > rhs_BigInt;
+}
+
+bool BigInt::operator>=(const BigInt& rhs) {
+	if (sign == '+' && rhs.sign == '-')
+		return true;
+	else if (sign == '-' && rhs.sign == '+')
+		return false;
+
+	if (value.size() > rhs.value.size())
+		return sign == '+';
+	else if (value.size() < rhs.value.size())
+		return sign == '-';
+	else {
+		std::string lhs_string = value;
+		std::string rhs_string = rhs.value;
+		while (!lhs_string.empty()) {
+			if (lhs_string[0] > rhs_string[0])
+				return sign == '+';
+			else if (lhs_string[0] < rhs_string[0])
+				return sign == '-';
+			else {
+				lhs_string.erase(0,1);
+				rhs_string.erase(0,1);
+			}
+		}
 	}
 
-	return result;			
+	return true;	// if equal, return true
+}
+
+bool BigInt::operator>=(long long rhs) {
+	BigInt rhs_BigInt = rhs;
+	return *this >= rhs_BigInt;
+}
+
+bool BigInt::operator<(const BigInt& rhs) {
+	if (sign == '+' && rhs.sign == '-')
+		return false;
+	else if (sign == '-' && rhs.sign == '+')
+		return true;
+
+	if (value.size() > rhs.value.size())
+		return sign == '-';
+	else if (value.size() < rhs.value.size())
+		return sign == '+';
+	else {
+		std::string lhs_string = value;
+		std::string rhs_string = rhs.value;
+		while (!lhs_string.empty()) {
+			if (lhs_string[0] > rhs_string[0])
+				return sign == '-';
+			else if (lhs_string[0] < rhs_string[0])
+				return sign == '+';
+			else {
+				lhs_string.erase(0,1);
+				rhs_string.erase(0,1);
+			}
+		}
+	}
+
+	return false;	// if equal, return false
+}
+
+bool BigInt::operator<(long long rhs) {
+	BigInt rhs_BigInt = rhs;
+	return *this < rhs_BigInt;
+}
+
+bool BigInt::operator<=(const BigInt& rhs) {
+	if (sign == '+' && rhs.sign == '-')
+		return false;
+	else if (sign == '-' && rhs.sign == '+')
+		return true;
+
+	if (value.size() > rhs.value.size())
+		return sign == '-';
+	else if (value.size() < rhs.value.size())
+		return sign == '+';
+	else {
+		std::string lhs_string = value;
+		std::string rhs_string = rhs.value;
+		while (!lhs_string.empty()) {
+			if (lhs_string[0] > rhs_string[0])
+				return sign == '-';
+			else if (lhs_string[0] < rhs_string[0])
+				return sign == '+';
+			else {
+				lhs_string.erase(0,1);
+				rhs_string.erase(0,1);
+			}
+		}
+	}
+
+	return true;	// if equal, return true
+}
+
+bool BigInt::operator<=(long long rhs) {
+	BigInt rhs_BigInt = rhs;
+	return *this <= rhs_BigInt;
+}
+
+bool BigInt::operator!=(const BigInt& rhs) {
+	if (*this == rhs)
+		return false;
+	else
+		return true;
+}
+
+bool BigInt::operator!=(long long rhs) {
+	BigInt rhs_BigInt = rhs;
+	return *this != rhs_BigInt;
 }
 
 #ifdef DEBUG
