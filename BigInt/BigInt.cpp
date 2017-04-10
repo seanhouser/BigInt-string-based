@@ -38,8 +38,8 @@ int _tmain(int argc, _TCHAR* argv[])
 	std::cout << "The negation of " << unary_test1 << " is: " << -unary_test1 << '\n';
 	*/
 
-	/*
-	// INCOMPLETE
+	
+	// COMPLETE
 	// unary increment tests
 	BigInt unary_test1 = 5;
 	std::cout << "++" << unary_test1 << " is: ";
@@ -48,10 +48,16 @@ int _tmain(int argc, _TCHAR* argv[])
 	std::cout <<  unary_test2 << "++" << " is: ";
 	std::cout << unary_test2++ << " on return from operation, but\n";
 	std::cout << "after return from operation previous BigInt is now: " << unary_test2 << '\n';
-	*/	
+	unary_test1 = 100;
+	std::cout << "--" << unary_test1 << " is: ";
+	std::cout << --unary_test1 << '\n';
+	std::cout <<  unary_test2 << "--" << " is: ";
+	std::cout << unary_test2-- << " on return from operation, but\n";
+	std::cout << "after return from operation previous BigInt is now: " << unary_test2 << '\n';
+	
 	
 	/*
-	// INCOMPLETE (missing pos + neg && neg + pos)
+	// COMPLETE
 	// arithmetic + test (BigInt + BigInt)
 	BigInt add_test1 = -1;
 	BigInt add_test2 = -9;
@@ -74,7 +80,9 @@ int _tmain(int argc, _TCHAR* argv[])
 	add_result = add_test1 + add_test2;
 	std::cout << add_test1 << " + " << add_test2 << " = " << add_result << '\n';
 	*/
-	// INCOMPLETE (missing pos + neg && neg + pos)
+
+	/*
+	// COMPLETE (pos + neg && neg + pos)
 	// arithmetic + test (BigInt + long long)
 	BigInt add_test1 = 1;
 	int add_test2 = -90;
@@ -84,9 +92,8 @@ int _tmain(int argc, _TCHAR* argv[])
 	add_test2 = 500;
 	add_result = add_test1 + add_test2;
 	std::cout << add_test1 << " + " << add_test2 << " = " << add_result << '\n';
-	
+	*/
 
-	
 	/*
 	// COMPLETE
 	// aritmetic * test (BigInt * BigInt and long long params)
@@ -110,7 +117,7 @@ int _tmain(int argc, _TCHAR* argv[])
 	// COMPLETE
 	// arithmetic - test (BigInt - BigInt)
 	BigInt subtest1 = -5;
-	BigInt subtest2 = -10;
+	int subtest2 = -10;
 	BigInt subresult;
 	subresult = subtest1 - subtest2;
 	std::cout << subtest1 << " - " << subtest2 << " = " << subresult << '\n';
@@ -139,7 +146,7 @@ int _tmain(int argc, _TCHAR* argv[])
 	subresult = subtest1 - subtest2;
 	std::cout << subtest1 << " - " << subtest2 << " = " << subresult << '\n';
 	*/
-
+	
 	/*
 	// COMPLETE
 	// arithmetic-assignment += test (BigInt and long long params)
@@ -167,6 +174,20 @@ int _tmain(int argc, _TCHAR* argv[])
 	aa_test1 *= aa_int_test;
 	std::cout << aa_test1 << '\n';
 	*/
+
+	
+	// COMPLETE
+	// arithmetic-assignment -= test (BigInt and long long params)
+	BigInt aa_test1 = 2;
+	BigInt aa_test2 = 5;
+	int aa_int_test = 10;
+	std::cout << aa_test1 << " set equal to " << aa_test1 << " - " << aa_test2 << " is: ";
+	aa_test1 -= aa_test2;
+	std::cout << aa_test1 << '\n';
+	std::cout << aa_test1 << " set equal to " << aa_test1 << " - " << aa_int_test << " is: ";
+	aa_test1 -= aa_int_test;
+	std::cout << aa_test1 << '\n';
+	
 
 	/*
 	// COMPLETE
@@ -365,12 +386,24 @@ BigInt BigInt::operator-() {
 }
 
 BigInt BigInt::operator++() {
-	return *this += 1;
+	*this += 1;
+	return *this;
 }
 
 BigInt BigInt::operator++( int ) {
 	BigInt temp = *this;
 	++*this;
+	return temp;
+}
+
+BigInt BigInt::operator--() {
+	*this -= 1;
+	return *this;
+}
+
+BigInt BigInt::operator--(int) {
+	BigInt temp = *this;
+	--*this;
 	return temp;
 }
 
@@ -563,32 +596,40 @@ BigInt BigInt::operator-(const BigInt& rhs) {
 	return result;
 }
 
+BigInt BigInt::operator-(long long num) {
+	BigInt rhs(num);
+	BigInt result = *this - rhs;
+	return result;
+}
 
 /*
     Arithmetic-assignment operators
     -------------------------------
 */
 
-BigInt BigInt::operator+=(const BigInt& rhs) {
+void BigInt::operator+=(const BigInt& rhs) {
 	*this = *this + rhs;
-	return *this;
 }
 
-BigInt BigInt::operator+=(long long num) {
+void BigInt::operator+=(long long num) {
 	*this = *this + num;
-	return *this;
 }
 
-BigInt BigInt::operator*=(const BigInt& rhs) {
+void BigInt::operator*=(const BigInt& rhs) {
 	*this = *this * rhs;
-	return *this;
 }
 
-BigInt BigInt::operator*=(long long num) {
+void BigInt::operator*=(long long num) {
 	*this = *this * num;
-	return *this;
 }
 
+void BigInt::operator-=(const BigInt& rhs) {
+	*this = *this - rhs;
+}
+
+void BigInt::operator-=(long long num) {
+	*this = *this - num;
+}
 
 
 /*

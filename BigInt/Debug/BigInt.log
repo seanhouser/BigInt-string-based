@@ -1,13 +1,13 @@
-﻿Build started 4/10/2017 1:54:13 PM.
+﻿Build started 4/10/2017 2:52:30 PM.
      1>Project "E:\Sean\Documents\GitHub\BigInt-string-based\BigInt\BigInt.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
          E:\Program Files\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yu"stdafx.h" /Fp"Debug\BigInt.pch" /Fo"Debug\\" /Fd"Debug\vc110.pdb" /Gd /TP /analyze- /errorReport:prompt BigInt.cpp
          BigInt.cpp
-     1>e:\sean\documents\github\bigint-string-based\bigint\bigint.cpp(525): warning C4101: 'subtracted_char' : unreferenced local variable
-     1>e:\sean\documents\github\bigint-string-based\bigint\bigint.cpp(638): warning C4715: 'BigInt::operator>' : not all control paths return a value
-     1>e:\sean\documents\github\bigint-string-based\bigint\bigint.cpp(672): warning C4715: 'BigInt::operator>=' : not all control paths return a value
-     1>e:\sean\documents\github\bigint-string-based\bigint\bigint.cpp(706): warning C4715: 'BigInt::operator<' : not all control paths return a value
-     1>e:\sean\documents\github\bigint-string-based\bigint\bigint.cpp(740): warning C4715: 'BigInt::operator<=' : not all control paths return a value
+     1>e:\sean\documents\github\bigint-string-based\bigint\bigint.cpp(558): warning C4101: 'subtracted_char' : unreferenced local variable
+     1>e:\sean\documents\github\bigint-string-based\bigint\bigint.cpp(679): warning C4715: 'BigInt::operator>' : not all control paths return a value
+     1>e:\sean\documents\github\bigint-string-based\bigint\bigint.cpp(713): warning C4715: 'BigInt::operator>=' : not all control paths return a value
+     1>e:\sean\documents\github\bigint-string-based\bigint\bigint.cpp(747): warning C4715: 'BigInt::operator<' : not all control paths return a value
+     1>e:\sean\documents\github\bigint-string-based\bigint\bigint.cpp(781): warning C4715: 'BigInt::operator<=' : not all control paths return a value
        Link:
          E:\Program Files\Microsoft Visual Studio 11.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"E:\Sean\Documents\GitHub\BigInt-string-based\Debug\BigInt.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"E:\Sean\Documents\GitHub\BigInt-string-based\Debug\BigInt.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"E:\Sean\Documents\GitHub\BigInt-string-based\Debug\BigInt.lib" /MACHINE:X86 Debug\BigInt.obj
          Debug\stdafx.obj
@@ -16,4 +16,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:01.66
+Time Elapsed 00:00:01.95

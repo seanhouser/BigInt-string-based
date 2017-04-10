@@ -22,8 +22,8 @@ public:
     // Arithmetic operators:
     BigInt operator+(const BigInt&);  
     BigInt operator+(long long);
-    BigInt operator-(const BigInt&);  // TODO
-    void operator-(long long);      // TODO
+    BigInt operator-(const BigInt&);  
+    BigInt operator-(long long);      
     BigInt operator*(const BigInt&); 
     BigInt operator*(long long);      
     void operator/(const BigInt&);  // TODO
@@ -32,12 +32,12 @@ public:
     void operator%(long long);      // TODO
 
     // Arithmetic-assignment operators:
-    BigInt operator+=(const BigInt&);
-    BigInt operator+=(long long);
-    void operator-=(const BigInt&); // TODO
-    void operator-=(long long);     // TODO
-    BigInt operator*=(const BigInt&); 
-    BigInt operator*=(long long);     
+    void operator+=(const BigInt&);
+    void operator+=(long long);
+    void operator-=(const BigInt&); 
+    void operator-=(long long);     
+    void operator*=(const BigInt&); 
+    void operator*=(long long);     
     void operator/=(const BigInt&); // TODO
     void operator/=(long long);     // TODO
     void operator%=(const BigInt&); // TODO
@@ -47,8 +47,8 @@ public:
     BigInt operator-();
     BigInt operator++(int); 
     BigInt operator++();    
-    BigInt operator--(int); // TODO
-    BigInt operator--();    // TODO
+    BigInt operator--(int); 
+    BigInt operator--();    
 
     // Relational operators:
     bool operator>(const BigInt&);	
