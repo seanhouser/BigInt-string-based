@@ -26,7 +26,7 @@ public:
     BigInt operator-(long long);      
     BigInt operator*(const BigInt&); 
     BigInt operator*(long long);      
-    void operator/(const BigInt&);  // TODO
+    BigInt operator/(const BigInt&);  // TODO
     void operator/(long long);      // TODO
     void operator%(const BigInt&);  // TODO
     void operator%(long long);      // TODO

@@ -38,7 +38,7 @@ int _tmain(int argc, _TCHAR* argv[])
 	std::cout << "The negation of " << unary_test1 << " is: " << -unary_test1 << '\n';
 	*/
 
-	
+	/*
 	// COMPLETE
 	// unary increment tests
 	BigInt unary_test1 = 5;
@@ -54,7 +54,7 @@ int _tmain(int argc, _TCHAR* argv[])
 	std::cout <<  unary_test2 << "--" << " is: ";
 	std::cout << unary_test2-- << " on return from operation, but\n";
 	std::cout << "after return from operation previous BigInt is now: " << unary_test2 << '\n';
-	
+	*/
 	
 	/*
 	// COMPLETE
@@ -147,6 +147,13 @@ int _tmain(int argc, _TCHAR* argv[])
 	std::cout << subtest1 << " - " << subtest2 << " = " << subresult << '\n';
 	*/
 	
+	// INCOMPLETE
+	// arithmetic / test
+	BigInt d_test1 = 2;
+	BigInt d_test2 = 1;
+	BigInt d_result = d_test1 / d_test2;
+	std::cout << d_test1 << "/" << d_test2 << " = " << d_result << '\n';
+
 	/*
 	// COMPLETE
 	// arithmetic-assignment += test (BigInt and long long params)
@@ -175,7 +182,7 @@ int _tmain(int argc, _TCHAR* argv[])
 	std::cout << aa_test1 << '\n';
 	*/
 
-	
+	/*
 	// COMPLETE
 	// arithmetic-assignment -= test (BigInt and long long params)
 	BigInt aa_test1 = 2;
@@ -187,7 +194,7 @@ int _tmain(int argc, _TCHAR* argv[])
 	std::cout << aa_test1 << " set equal to " << aa_test1 << " - " << aa_int_test << " is: ";
 	aa_test1 -= aa_int_test;
 	std::cout << aa_test1 << '\n';
-	
+	*/
 
 	/*
 	// COMPLETE
@@ -599,6 +606,20 @@ BigInt BigInt::operator-(const BigInt& rhs) {
 BigInt BigInt::operator-(long long num) {
 	BigInt rhs(num);
 	BigInt result = *this - rhs;
+	return result;
+}
+
+BigInt BigInt::operator/(const BigInt& rhs) {
+	// use multiplaction and a counter to see how many of lhs fit into rhs?
+	// use optional param passed by reference to return remainder as modulo operation?
+
+	BigInt result;
+	BigInt count = rhs;
+	while (count > 0) {
+
+		--count;
+	}
+
 	return result;
 }
 
