@@ -149,8 +149,9 @@ int _tmain(int argc, _TCHAR* argv[])
 	
 	// INCOMPLETE
 	// arithmetic / test
-	BigInt d_test1 = 2;
-	BigInt d_test2 = 1;
+	std::cout << "Division using ints; " << "100 / -5 = " << 100/ 5 << '\n';
+	BigInt d_test1 = 100;
+	BigInt d_test2 = 5;
 	BigInt d_result = d_test1 / d_test2;
 	std::cout << d_test1 << "/" << d_test2 << " = " << d_result << '\n';
 
@@ -613,12 +614,13 @@ BigInt BigInt::operator/(const BigInt& rhs) {
 	// use multiplaction and a counter to see how many of lhs fit into rhs?
 	// use optional param passed by reference to return remainder as modulo operation?
 
-	BigInt result;
+	BigInt result = 0;
 	BigInt count = rhs;
-	while (count > 0) {
-
-		--count;
+	while (count <= *this) {
+		count += rhs;
+		++result;
 	}
+	BigInt remainder = *this - count;
 
 	return result;
 }
