@@ -27,8 +27,8 @@ public:
     BigInt operator*(long long);
     BigInt operator/(const BigInt&);
     BigInt operator/(long long);
-    BigInt operator%(const BigInt&);  // TODO
-    BigInt operator%(long long);      // TODO
+    BigInt operator%(const BigInt&);
+    BigInt operator%(long long);
 
     // Arithmetic-assignment operators:
     void operator+=(const BigInt&);
@@ -39,8 +39,8 @@ public:
     void operator*=(long long);
     void operator/=(const BigInt&);
     void operator/=(long long);
-    void operator%=(const BigInt&); // TODO
-    void operator%=(long long);     // TODO
+    void operator%=(const BigInt&);
+    void operator%=(long long);
 
     // Unary operators:
     BigInt operator-();
