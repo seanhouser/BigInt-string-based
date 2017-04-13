@@ -4,6 +4,7 @@
 #include "stdafx.h"
 #include <string>
 #include "BigInt.hpp"
+#include <stdexcept>
 
 bool is_valid_number(const std::string& num);
 void notify_invalid_input(const std::string& input);
@@ -147,13 +148,45 @@ int _tmain(int argc, _TCHAR* argv[])
 	std::cout << subtest1 << " - " << subtest2 << " = " << subresult << '\n';
 	*/
 	
+	
 	// INCOMPLETE
-	// arithmetic / test
-	std::cout << "Division using ints; " << "100 / -5 = " << 100/ 5 << '\n';
+	// arithmetic / test and arithmetic-assignment /= test
 	BigInt d_test1 = 100;
-	BigInt d_test2 = 5;
+	BigInt d_test2 = 6;
 	BigInt d_result = d_test1 / d_test2;
 	std::cout << d_test1 << "/" << d_test2 << " = " << d_result << '\n';
+	d_test1 = -55;
+	d_test2 = 1;
+	d_result = d_test1 / d_test2;
+	std::cout << d_test1 << "/" << d_test2 << " = " << d_result << '\n';
+	d_test1 = 55;
+	d_test2 = 5;
+	d_result = d_test1 / d_test2;
+	std::cout << d_test1 << "/" << d_test2 << " = " << d_result << '\n';
+	d_test1 = 55;
+	d_test2 = 1;
+	d_result = d_test1 / d_test2;
+	std::cout << d_test1 << "/" << d_test2 << " = " << d_result << '\n';
+	d_test1 = 55;
+	d_test2 = -1;
+	d_result = d_test1 / d_test2;
+	std::cout << d_test1 << "/" << d_test2 << " = " << d_result << '\n';
+	d_test1 = 55;
+	d_test2 = -5;
+	d_result = d_test1 / d_test2;
+	std::cout << d_test1 << "/" << d_test2 << " = " << d_result << '\n';
+	d_test1 = 12;
+	int d_test_int = -3;
+	d_result = d_test1 / d_test_int;
+	std::cout << d_test1 << "/" << d_test_int << " = " << d_result << '\n';
+	d_result = 100;
+	d_test2 = 10;
+	d_result /= d_test2;
+	std::cout << "100 /= " << d_test2 << " = " << d_result << '\n';
+	d_result = 100;
+	d_result /= 50;
+	std::cout << "100 /= 50 = " << d_result << '\n';
+	
 
 	/*
 	// COMPLETE
@@ -262,8 +295,7 @@ int _tmain(int argc, _TCHAR* argv[])
 bool is_valid_number(const std::string& num) {
     for (char digit : num)
         if (digit < '0' || digit > '9')
-			if (digit != '+' && digit != '-')
-				return false;
+			return false;
 
     return true;
 }
@@ -611,17 +643,42 @@ BigInt BigInt::operator-(long long num) {
 }
 
 BigInt BigInt::operator/(const BigInt& rhs) {
-	// use multiplaction and a counter to see how many of lhs fit into rhs?
-	// use optional param passed by reference to return remainder as modulo operation?
-
+	BigInt lhs_temp = *this;
+	BigInt rhs_temp = rhs;
 	BigInt result = 0;
-	BigInt count = rhs;
-	while (count <= *this) {
-		count += rhs;
-		++result;
-	}
-	BigInt remainder = *this - count;
+	BigInt count;
+	char result_sign;
 
+	if (sign == rhs.sign)	// set result sign
+		result_sign = '+';
+	else
+		result_sign = '-';
+	lhs_temp.sign = '+';
+	rhs_temp.sign = '+';
+	count = rhs_temp;
+
+	if (rhs == 1)	// divide by 1 case
+		return *this;
+	else if (rhs == 0) {	// divide by 0 case
+		throw std::invalid_argument("Attempted to divide by 0");
+	}
+	else {		// typical division
+		while (count <= lhs_temp) {
+			count += rhs_temp;
+			++result;
+		}
+	}
+
+	BigInt remainder = lhs_temp - (count - rhs_temp);
+	remove_leading_zeroes(remainder.value);
+
+	result.sign = result_sign;
+	return result;
+}
+
+BigInt BigInt::operator/(long long num) {
+	BigInt rhs(num);
+	BigInt result = *this / rhs;
 	return result;
 }
 
@@ -654,171 +711,82 @@ void BigInt::operator-=(long long num) {
 	*this = *this - num;
 }
 
+void BigInt::operator/=(const BigInt& rhs) {
+	*this = *this / rhs;
+}
+
+void BigInt::operator/=(long long num) {
+	*this = *this / num;
+}
+
 
 /*
     Relational operators
     --------------------
 */
 
-bool BigInt::operator==(const BigInt& rhs) {
-	if (sign == rhs.sign && value == rhs.value)
-		return true;
-	else
-		return false;
-}
-
-bool BigInt::operator==(long long rhs) {
-	BigInt rhs_BigInt = rhs;
-	return *this == rhs_BigInt;
-}
-
-bool BigInt::operator>(const BigInt& rhs) {
-	if (*this == rhs)
-		return false;
-	else if (sign == '+' && rhs.sign == '-')
-		return true;
-	else if (sign == '-' && rhs.sign == '+')
-		return false;
-
-	if (value.size() > rhs.value.size())
-		return sign == '+';
-	else if (value.size() < rhs.value.size())
-		return sign == '-';
-	else {
-		std::string lhs_string = value;
-		std::string rhs_string = rhs.value;
-		while (!lhs_string.empty()) {
-			if (lhs_string[0] > rhs_string[0])
-				return sign == '+';
-			else if (lhs_string[0] < rhs_string[0])
-				return sign == '-';
-			else {
-				lhs_string.erase(0,1);
-				rhs_string.erase(0,1);
-			}
+bool BigInt::operator<(const BigInt& num) const {
+    if (sign == num.sign) {
+        if (sign == '+') {
+            if (value.length() == num.value.length())
+                return value < num.value;
+            else
+                return value.length() < num.value.length();
+        }
+        else {
+			BigInt lhs_temp = *this;
+			BigInt rhs_temp = num;
+            return -(lhs_temp) > -rhs_temp;
 		}
-	}
-	// no return needed, all cases have returned
+    }
+    else
+        return sign == '-';
 }
 
-bool BigInt::operator>(long long rhs) {
-	BigInt rhs_BigInt = rhs;
-	return *this > rhs_BigInt;
+bool BigInt::operator<(const long long num) const {
+    return *this < BigInt(num);
 }
 
-bool BigInt::operator>=(const BigInt& rhs) {
-	if (*this == rhs)
-		return true;
-	else if (sign == '+' && rhs.sign == '-')
-		return true;
-	else if (sign == '-' && rhs.sign == '+')
-		return false;
-
-	if (value.size() > rhs.value.size())
-		return sign == '+';
-	else if (value.size() < rhs.value.size())
-		return sign == '-';
-	else {
-		std::string lhs_string = value;
-		std::string rhs_string = rhs.value;
-		while (!lhs_string.empty()) {
-			if (lhs_string[0] > rhs_string[0])
-				return sign == '+';
-			else if (lhs_string[0] < rhs_string[0])
-				return sign == '-';
-			else {
-				lhs_string.erase(0,1);
-				rhs_string.erase(0,1);
-			}
-		}
-	}
-	// no return needed, all cases have returned
+bool BigInt::operator<=(const BigInt& num) const {
+    return (*this < num) || (*this == num);
 }
 
-bool BigInt::operator>=(long long rhs) {
-	BigInt rhs_BigInt = rhs;
-	return *this >= rhs_BigInt;
+bool BigInt::operator<=(const long long num) const {
+    return !(*this > BigInt(num));
 }
 
-bool BigInt::operator<(const BigInt& rhs) {
-	if (*this == rhs)
-		return false;
-	else if (sign == '+' && rhs.sign == '-')
-		return false;
-	else if (sign == '-' && rhs.sign == '+')
-		return true;
-
-	if (value.size() > rhs.value.size())
-		return sign == '-';
-	else if (value.size() < rhs.value.size())
-		return sign == '+';
-	else {
-		std::string lhs_string = value;
-		std::string rhs_string = rhs.value;
-		while (!lhs_string.empty()) {
-			if (lhs_string[0] > rhs_string[0])
-				return sign == '-';
-			else if (lhs_string[0] < rhs_string[0])
-				return sign == '+';
-			else {
-				lhs_string.erase(0,1);
-				rhs_string.erase(0,1);
-			}
-		}
-	}
-	// no return needed, all cases have returned
+bool BigInt::operator==(const BigInt& num) const {
+    return (sign == num.sign) && (value == num.value);
 }
 
-bool BigInt::operator<(long long rhs) {
-	BigInt rhs_BigInt = rhs;
-	return *this < rhs_BigInt;
+bool BigInt::operator==(const long long num) const {
+    return *this == BigInt(num);
 }
 
-bool BigInt::operator<=(const BigInt& rhs) {
-	if (*this == rhs)
-		return true;
-	if (sign == '+' && rhs.sign == '-')
-		return false;
-	else if (sign == '-' && rhs.sign == '+')
-		return true;
-
-	if (value.size() > rhs.value.size())
-		return sign == '-';
-	else if (value.size() < rhs.value.size())
-		return sign == '+';
-	else {
-		std::string lhs_string = value;
-		std::string rhs_string = rhs.value;
-		while (!lhs_string.empty()) {
-			if (lhs_string[0] > rhs_string[0])
-				return sign == '-';
-			else if (lhs_string[0] < rhs_string[0])
-				return sign == '+';
-			else {
-				lhs_string.erase(0,1);
-				rhs_string.erase(0,1);
-			}
-		}
-	}
-	// no return needed, all cases have returned
+bool BigInt::operator>=(const BigInt& num) const {
+    return !(*this < num);
 }
 
-bool BigInt::operator<=(long long rhs) {
-	BigInt rhs_BigInt = rhs;
-	return *this <= rhs_BigInt;
+bool BigInt::operator>=(const long long num) const {
+    return !(*this < BigInt(num));
 }
 
-bool BigInt::operator!=(const BigInt& rhs) {
-	if (*this == rhs)
-		return false;
-	else
-		return true;
+bool BigInt::operator>(const BigInt& num) const {
+    return !((*this < num) || (*this == num));
 }
 
-bool BigInt::operator!=(long long rhs) {
-	BigInt rhs_BigInt = rhs;
-	return *this != rhs_BigInt;
+bool BigInt::operator>(const long long num) const {
+    return *this > BigInt(num);
 }
+
+bool BigInt::operator!=(const BigInt& num) const {
+    return !(*this == num);
+}
+
+bool BigInt::operator!=(const long long num) const {
+    return !(*this == BigInt(num));
+}
+
 
 #ifdef DEBUG
 int main() {
